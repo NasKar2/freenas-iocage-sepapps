@@ -133,13 +133,13 @@ iocage restart ${JAIL_NAME}
 
 #
 # Install Sonarr
-#iocage exec ${JAIL_NAME} ln -s /usr/local/bin/mono /usr/bin/mono
+iocage exec ${JAIL_NAME} ln -s /usr/local/bin/mono /usr/bin/mono
 iocage exec ${JAIL_NAME} "fetch http://download.sonarr.tv/v2/master/mono/NzbDrone.master.tar.gz -o /usr/local/share"
 iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/NzbDrone.master.tar.gz -C /usr/local/share"
 iocage exec ${JAIL_NAME} -- rm /usr/local/share/NzbDrone.master.tar.gz
-#iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
+iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
 iocage exec ${JAIL_NAME} chown -R media:media /usr/local/share/NzbDrone /config
-#iocage exec ${JAIL_NAME} -- mkdir /usr/local/etc/rc.d
+iocage exec ${JAIL_NAME} -- mkdir /usr/local/etc/rc.d
 iocage exec ${JAIL_NAME} cp -f /mnt/configs/sonarr /usr/local/etc/rc.d/sonarr
 iocage exec ${JAIL_NAME} chmod u+x /usr/local/etc/rc.d/sonarr
 iocage exec ${JAIL_NAME} sed -i '' "s/sonarrdata/${SONARR_DATA}/" /usr/local/etc/rc.d/sonarr
