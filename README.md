@@ -58,7 +58,7 @@ Then run this command to install Sonarr
 ./sonarrinstall.sh
 ```
 
-Other apps can be installed with <appName>install.sh
+Other apps can be installed with AppNameinstall.sh
 
 ## After install
 
