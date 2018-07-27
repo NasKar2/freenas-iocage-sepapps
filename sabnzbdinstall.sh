@@ -144,6 +144,7 @@ iocage restart ${JAIL_NAME}
 #
 # Install Sabnzbd
 iocage exec ${JAIL_NAME} pkg install -y sabnzbdplus
+iocage exec ${JAIL_NAME} pw groupadd -n media -g 8675309
 iocage exec ${JAIL_NAME} ln -s /usr/local/bin/python2.7 /usr/bin/python
 iocage exec ${JAIL_NAME} ln -s /usr/local/bin/python2.7 /usr/bin/python2
 iocage exec ${JAIL_NAME} "pw groupmod media -m _sabnzbd"
