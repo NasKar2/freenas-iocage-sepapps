@@ -33,8 +33,8 @@ load_rc_config ${name}
 : ${sabnzbd_enable:=NO}
 : ${sabnzbd_user:=media}
 : ${sabnzbd_group:=media}
-: ${sabnzbd_conf_dir="/config/sabnzbddata"}
-: ${sabnzbd_pidfile:="/config/sabnzbdpid/sabnzbd.pid"}
+: ${sabnzbd_conf_dir="/config"}
+: ${sabnzbd_pidfile:="/config/sabnzbd.pid"}
 
 pidfile=${sabnzbd_pidfile}
 
