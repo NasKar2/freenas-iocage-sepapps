@@ -169,7 +169,7 @@ iocage exec ${JAIL_NAME} chown -R media:media /mnt/media
 iocage restart ${JAIL_NAME}
 iocage exec ${JAIL_NAME} service sabnzbd start
 iocage exec ${JAIL_NAME} service sabnzbd stop
-iocage exec ${JAIL_NAME} sed -i '' -e 's?host = 127.0.0.1?host = 0.0.0.0?g' /config/sabnzbd.ini
+iocage exec ${JAIL_NAME} sed -i '' -e 's?host = 127.0.0.1?host = ${JAIL_IP}?g' /config/sabnzbd.ini
 iocage exec ${JAIL_NAME} sed -i '' -e 's?download_dir = Downloads/incomplete?download_dir = /mnt/media/downloads/sabnzbd/incomplete?g' /config/sabnzbd.ini
 iocage exec ${JAIL_NAME} sed -i '' -e 's?complete_dir = Downloads/complete?complete_dir = /mnt/media/downloads/sabnzbd/complete?g' /config/sabnzbd.ini
 iocage exec ${JAIL_NAME} service sabnzbd start
