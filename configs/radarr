@@ -31,7 +31,7 @@ load_rc_config $name
 : ${radarr_enable:="NO"}
 : ${radarr_user:="media"}
 : ${radarr_group:="media"}
-: ${radarr_data_dir:="/config/radarrdata"}
+: ${radarr_data_dir:="/config"}
 
 pidfile="${radarr_data_dir}/nzbdrone.pid"
 command="/usr/sbin/daemon"
