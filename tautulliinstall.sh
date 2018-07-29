@@ -107,8 +107,8 @@ iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${tautulli_config} /config nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
 
 iocage restart ${JAIL_NAME}
   
@@ -120,7 +120,7 @@ iocage restart ${JAIL_NAME}
 
 #
 # Install tautulli
-iocage fstab -a ${JAIL_NAME} ${tautulli_config} /config nullfs rw 0 0
+#iocage fstab -a ${JAIL_NAME} ${tautulli_config} /config nullfs rw 0 0
 iocage exec ${JAIL_NAME} git clone https://github.com/Tautulli/Tautulli.git /usr/local/share/Tautulli
 iocage exec ${JAIL_NAME} "pw user add tautulli -c tautulli -u 109 -d /nonexistent -s /usr/bin/nologin"
 iocage exec ${JAIL_NAME} chown -R tautulli:tautulli /usr/local/share/Tautulli /config
@@ -147,5 +147,5 @@ iocage restart ${JAIL_NAME}
 
 echo
 
-echo "Tautulli should be available at http://${JAIL_IP}:8989"
+echo "Tautulli should be available at http://${JAIL_IP}:8181"
 
