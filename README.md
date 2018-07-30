@@ -47,7 +47,7 @@ VNET="off"
 JAIL_NAME="radarr"
 POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
-RADARR_DATA>="radarrdata"
+RADARR_DATA="radarrdata"
 MEDIA_LOCATION="media"
 TORRENTS_LOCATION="torrents"
 ```
@@ -61,7 +61,7 @@ Then run this command to install Sonarr
 ./sonarrinstall.sh
 ```
 
-Other apps can be installed with AppNameinstall.sh
+Other apps can be installed with ./AppNameinstall.sh
 
 ## After install
 
