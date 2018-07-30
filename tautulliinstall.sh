@@ -16,9 +16,6 @@ VNET="off"
 POOL_PATH=""
 APPS_PATH=""
 TAUTULLI_DATA=""
-MEDIA_LOCATION=""
-TORRENTS_LOCATION=""
-
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
@@ -61,16 +58,6 @@ fi
 
 if [ -z $TAUTULLI_DATA ]; then
   echo 'Configuration error: TAUTULLI_DATA must be set'
-  exit 1
-fi
-
-if [ -z $MEDIA_LOCATION ]; then
-  echo 'Configuration error: MEDIA_LOCATION must be set'
-  exit 1
-fi
-
-if [ -z $TORRENTS_LOCATION ]; then
-  echo 'Configuration error: TORRENTS_LOCATION must be set'
   exit 1
 fi
 

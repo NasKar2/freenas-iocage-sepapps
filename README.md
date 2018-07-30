@@ -1,6 +1,8 @@
 # sepapps-freenas-iocage
 
-Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Sonarr, Radarr, Lidarr, and Sabnzbd
+## https://github.com/NasKar2/sepapps-freenas-iocage.git
+
+Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Sonarr, Radarr, Lidarr, Tautulli and Sabnzbd
 
 Sonarr etc. will be placed in a jail with separate data directory (/mnt/v1/apps/...) to allow for easy reinstallation/backup.
 
@@ -35,7 +37,7 @@ MEDIA_LOCATION="media"
 TORRENTS_LOCATION="torrents"
 ```
 
-Likewise create config files for the other apps - radarr-config, lidarr-config, sabnzbd-config and replace JAIL_IP, JAIL_NAME, and JAIL_DATA with the name of the application. For example see below for radarr.
+Likewise create config files for the other apps - radarr-config, lidarr-config, sabnzbd-config, tautulli-config and replace JAIL_IP, JAIL_NAME, and JAIL_DATA with the name of the application. For example see below for radarr.
 
 ```
 JAIL_IP="192.168.5.52"

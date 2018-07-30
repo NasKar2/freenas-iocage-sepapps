@@ -178,13 +178,13 @@ iocage exec ${JAIL_NAME} sed -i '' -e 's?complete_dir = Downloads/complete?compl
 iocage exec ${JAIL_NAME} sed -i '' -e 's?permissions = ""?permissions = 777?g' /config/sabnzbd.ini
 echo "before start after sed"
 iocage exec ${JAIL_NAME} service sabnzbd start
-
+iocage restart ${JAIL_NAME}
 echo "Sabnzbd installed"
 
 
 #
 # remove /mnt/configs as no longer needed
-#iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
+iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 
 echo
 
