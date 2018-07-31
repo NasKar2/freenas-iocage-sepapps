@@ -122,16 +122,6 @@ iocage restart ${JAIL_NAME}
 #iocage restart ${JAIL_NAME} 
 
 #
-# Make media owner of data directories
-#chown -R media:media $sonarr_config/
-#chown -R media:media $radarr_config/
-#chown -R media:media $lidarr_config/
-#chown -R media:media $sabnzbd_config/
-#chown -R plex:plex $plex_config/
-#chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
-#chown -R media:media ${POOL_PATH}/${TORRENTS_LOCATION}
-
-#
 # Make pkg upgrade get the latest repo
 iocage exec ${JAIL_NAME} mkdir -p /usr/local/etc/pkg/repos/
 iocage exec ${JAIL_NAME} cp -f /mnt/configs/FreeBSD.conf /usr/local/etc/pkg/repos/FreeBSD.conf
@@ -185,6 +175,10 @@ echo "Sabnzbd installed"
 #
 # remove /mnt/configs as no longer needed
 iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
+
+# Make media owner of data directories
+chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
+chown -R media:media ${POOL_PATH}/${TORRENTS_LOCATION}
 
 echo
 

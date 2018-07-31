@@ -122,16 +122,6 @@ iocage restart ${JAIL_NAME}
 #iocage restart ${JAIL_NAME} 
 
 #
-# Make media owner of data directories
-#chown -R media:media $sonarr_config/
-#chown -R media:media $radarr_config/
-#chown -R media:media $lidarr_config/
-#chown -R media:media $sabnzbd_config/
-#chown -R plex:plex $plex_config/
-#chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
-#chown -R media:media ${POOL_PATH}/${TORRENTS_LOCATION}
-
-#
 # Install Sonarr
 iocage exec ${JAIL_NAME} ln -s /usr/local/bin/mono /usr/bin/mono
 iocage exec ${JAIL_NAME} "fetch http://download.sonarr.tv/v2/master/mono/NzbDrone.master.tar.gz -o /usr/local/share"
@@ -160,6 +150,11 @@ iocage restart ${JAIL_NAME}
 #
 # remove /mnt/configs as no longer needed
 #iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
+
+#
+# Make media owner of data directories
+chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
+chown -R media:media ${POOL_PATH}/${TORRENTS_LOCATION}
 
 echo
 

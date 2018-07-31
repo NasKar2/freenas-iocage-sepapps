@@ -122,16 +122,6 @@ iocage restart ${JAIL_NAME}
 #iocage restart ${JAIL_NAME} 
 
 #
-# Make media owner of data directories
-#chown -R media:media $sonarr_config/
-#chown -R media:media $radarr_config/
-#chown -R media:media $lidarr_config/
-#chown -R media:media $sabnzbd_config/
-#chown -R plex:plex $plex_config/
-#chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
-#chown -R media:media ${POOL_PATH}/${TORRENTS_LOCATION}
-
-#
 # Install Radarr
 iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents/sabnzbd/incomplete
 iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents/sabnzbd/complete
@@ -171,6 +161,10 @@ iocage restart ${JAIL_NAME}
 #
 # remove /mnt/configs as no longer needed
 #iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
+
+# Make media owner of data directories
+chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
+chown -R media:media ${POOL_PATH}/${TORRENTS_LOCATION}
 
 echo
 echo "Radarr should be available at http://${JAIL_IP}:7878"
