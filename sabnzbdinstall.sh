@@ -76,11 +76,13 @@ fi
 
 #
 # Create Jail
-echo '{"pkgs":["nano","mono","mediainfo","sqlite3","ca_root_nss","curl"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+#echo '{"pkgs":["nano","mono","mediainfo","sqlite3","ca_root_nss","curl"]}' > /tmp/pkg.json
+#iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
-rm /tmp/pkg.json
-
+#rm /tmp/pkg.json
+iocage create --name "${JAIL_NAME}" -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+iocage exec ${JAIL_NAME} pkg install -y "nano","mono","mediainfo","sqlite3","ca_root_nss","curl"
+iocage exec ${JAIL_NAME} cp -f /mnt/configs/libdl* /usr/lib/
 #
 # needed for installing from ports
 #mkdir -p ${PORTS_PATH}/ports
