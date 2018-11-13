@@ -88,6 +88,7 @@ if [ "${RELEASE}" = "11.1-RELEASE" ]; then
   iocage exec ${JAIL_NAME} sed -i '' "s/quarterly/release_2/" /etc/pkg/FreeBSD.conf
   iocage exec ${JAIL_NAME} pkg update -f
   iocage exec ${JAIL_NAME} pkg upgrade -yf
+fi
 #
 # needed for installing from ports
 #mkdir -p ${PORTS_PATH}/ports
@@ -128,6 +129,7 @@ iocage restart ${JAIL_NAME}
 #iocage exec ${JAIL_NAME} pw groupmod media -m media
 #iocage restart ${JAIL_NAME} 
 
+if [ "${RELEASE}" != "11.1-RELEASE" ]; then
 #
 # Make pkg upgrade get the latest repo
 iocage exec ${JAIL_NAME} mkdir -p /usr/local/etc/pkg/repos/
@@ -137,7 +139,7 @@ iocage exec ${JAIL_NAME} cp -f /mnt/configs/FreeBSD.conf /usr/local/etc/pkg/repo
 # Upgrade to the lastest repo
 iocage exec ${JAIL_NAME} pkg upgrade -y
 iocage restart ${JAIL_NAME}
-
+fi
 #
 # Install Sabnzbd
 iocage exec ${JAIL_NAME} pkg install -y sabnzbdplus
