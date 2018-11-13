@@ -24,6 +24,7 @@ SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/sabnzbd-config
 CONFIGS_PATH=$SCRIPTPATH/configs
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
 
 # Check for sabnzbd-config and set configuration
 if ! [ -e $SCRIPTPATH/sabnzbd-config ]; then
@@ -81,6 +82,12 @@ iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r 11.1-RELEASE ip4_addr="$
 
 rm /tmp/pkg.json
 
+# fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release
+# source: https://forums.freenas.org/index.php?threads/openvpn-fails-in-jail-with-libdl-so-1-not-found-error.70391/
+if [ "${RELEASE}" = "11.1-RELEASE" ]; then
+  iocage exec ${JAIL_NAME} sed -i '' "s/quarterly/release_2/" /etc/pkg/FreeBSD.conf
+  iocage exec ${JAIL_NAME} pkg update -f
+  iocage exec ${JAIL_NAME} pkg upgrade -yf
 #
 # needed for installing from ports
 #mkdir -p ${PORTS_PATH}/ports
