@@ -65,7 +65,7 @@ fi
 #
 # Create Jail
 echo '{"pkgs":["nano","python2","py27-sqlite3","py27-openssl","ca_root_nss","git"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r ${RELEASE} ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
 rm /tmp/pkg.json
 # fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release

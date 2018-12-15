@@ -78,7 +78,7 @@ fi
 #
 # Create Jail
 echo '{"pkgs":["nano","mono","mediainfo","sqlite3","ca_root_nss","curl"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r ${RELEASE} ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
 rm /tmp/pkg.json
 # fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release
@@ -130,9 +130,9 @@ iocage restart ${JAIL_NAME}
 
 #
 # Install Lidarr
-iocage exec ${JAIL_NAME} "fetch https://github.com/lidarr/Lidarr/releases/download/v0.2.0.371/Lidarr.develop.0.2.0.371.linux.tar.gz -o /usr/local/share"
+iocage exec ${JAIL_NAME} "fetch https://github.com/lidarr/Lidarr/releases/download/v0.4.0.524/Lidarr.develop.0.4.0.524.linux.tar.gz -o /usr/local/share"
 iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/Lidarr.develop.*.linux.tar.gz -C /usr/local/share"
-iocage exec ${JAIL_NAME} rm /usr/local/share/Lidarr.develop.0.2.0.371.linux.tar.gz
+iocage exec ${JAIL_NAME} rm /usr/local/share/Lidarr.develop.*.linux.tar.gz
 iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
 iocage exec ${JAIL_NAME} chown -R media:media /usr/local/share/Lidarr /config
 iocage exec ${JAIL_NAME} mkdir /usr/local/etc/rc.d
