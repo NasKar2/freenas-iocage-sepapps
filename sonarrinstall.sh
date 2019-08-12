@@ -180,4 +180,4 @@ chown -R media:media ${POOL_PATH}/${TORRENTS_LOCATION}
 echo
 
 echo "Sonarr should be available at http://${JAIL_IP}:8989"
-
+echo "TV Shows will be located at "${POOL_PATH}/${MEDIA_LOCATION}/videos/tvshows
