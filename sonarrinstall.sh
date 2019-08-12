@@ -103,8 +103,9 @@ mkdir -p ${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}
 #mkdir -p ${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}
 #mkdir -p ${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}
 #mkdir -p ${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
-mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}
+mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/videos/tvshows
 mkdir -p ${POOL_PATH}/${TORRENTS_LOCATION}
+chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
 echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}'"
 #echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}'"
 
