@@ -78,7 +78,7 @@ fi
 
 #
 # Create Jail
-echo '{"pkgs":["nano","mono","mediainfo","sqlite3","ca_root_nss","curl"]}' > /tmp/pkg.json
+echo '{"pkgs":["nano","mono","mediainfo","sqlite3","ca_root_nss","curl","chromaprint"]}' > /tmp/pkg.json
 if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 then
 	echo "Failed to create jail"
