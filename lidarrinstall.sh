@@ -103,7 +103,8 @@ fi
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}
 #mkdir -p ${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}
 #mkdir -p ${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
-mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}
+mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/videos/music
+mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/${SABNZBD_DOWNLOADS}
 mkdir -p ${POOL_PATH}/${TORRENTS_LOCATION}
 echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}'"
 #echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}'"
