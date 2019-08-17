@@ -18,6 +18,7 @@ APPS_PATH=""
 LIDARR_DATA=""
 MEDIA_LOCATION=""
 TORRENTS_LOCATION=""
+SABNZBD_DOWNLOADS="downloads/sabnzbd/complete/music"
 
 
 SCRIPT=$(readlink -f "$0")
@@ -122,6 +123,7 @@ iocage exec ${JAIL_NAME} mkdir -p /config
 iocage exec ${JAIL_NAME} mkdir -p /mnt/media
 iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents
+iocage exec ${JAIL_NAME} mkdir -p /mnt/media/${SABNZBD_DOWNLOADS}
 
 #
 # mount ports so they can be accessed in the jail
