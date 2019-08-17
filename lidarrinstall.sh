@@ -145,7 +145,7 @@ iocage restart ${JAIL_NAME}
 
 #
 # Install Lidarr
-iocage exec ${JAIL_NAME} "fetch https://github.com/lidarr/Lidarr/releases/download/v0.4.0.524/Lidarr.develop.0.4.0.524.linux.tar.gz -o /usr/local/share"
+iocage exec ${JAIL_NAME} "fetch https://github.com/lidarr/Lidarr/releases/download/v0.6.2.883/Lidarr.develop.0.6.2.883.linux.tar.gz -o /usr/local/share"
 iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/Lidarr.develop.*.linux.tar.gz -C /usr/local/share"
 iocage exec ${JAIL_NAME} rm /usr/local/share/Lidarr.develop.*.linux.tar.gz
 iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
