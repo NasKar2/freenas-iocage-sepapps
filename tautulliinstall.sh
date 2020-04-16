@@ -16,13 +16,13 @@ VNET="off"
 POOL_PATH=""
 APPS_PATH=""
 TAUTULLI_DATA=""
+USE_BASEJAIL="-b"
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/tautulli-config
 CONFIGS_PATH=$SCRIPTPATH/configs
-RELEASE="11.3-RELEASE"
-#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
 
 # Check for tautulli-config and set configuration
 if ! [ -e $SCRIPTPATH/tautulli-config ]; then
@@ -66,7 +66,7 @@ fi
 #
 # Create Jail
 echo '{"pkgs":["nano","python2","py27-sqlite3","py27-openssl","ca_root_nss","git"]}' > /tmp/pkg.json
-if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
 	echo "Failed to create jail"
 	exit 1

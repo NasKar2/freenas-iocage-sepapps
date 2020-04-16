@@ -18,14 +18,13 @@ APPS_PATH=""
 SABNZBD_DATA=""
 MEDIA_LOCATION=""
 TORRENTS_LOCATION=""
-
+USE_BASEJAIL="-b"
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/sabnzbd-config
 CONFIGS_PATH=$SCRIPTPATH/configs
-RELEASE="11.3-RELEASE"
-#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
 
 # Check for sabnzbd-config and set configuration
 if ! [ -e $SCRIPTPATH/sabnzbd-config ]; then
@@ -79,7 +78,7 @@ fi
 #
 # Create Jail
 echo '{"pkgs":["nano","mono","mediainfo","sqlite3","ca_root_nss","curl"]}' > /tmp/pkg.json
-if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
 	echo "Failed to create jail"
 	exit 1
