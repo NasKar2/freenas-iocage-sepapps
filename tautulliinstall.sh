@@ -65,7 +65,7 @@ fi
 
 #
 # Create Jail
-echo '{"pkgs":["nano","python2","py27-sqlite3","py27-openssl","ca_root_nss","git"]}' > /tmp/pkg.json
+echo '{"pkgs":["nano","python3","py37-sqlite3","py37-openssl","ca_root_nss","git"]}' > /tmp/pkg.json
 if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
 	echo "Failed to create jail"
