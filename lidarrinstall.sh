@@ -171,7 +171,7 @@ iocage restart ${JAIL_NAME}
 
 #
 # remove /mnt/configs as no longer needed
-#iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
+iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 
 # Make media owner of data directories
 chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
