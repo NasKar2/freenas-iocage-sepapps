@@ -10,6 +10,7 @@ fi
 
 # Initialize defaults
 JAIL_IP=""
+JAIL_NAME=""
 DEFAULT_GW_IP=""
 INTERFACE=""
 VNET="off"
@@ -24,7 +25,7 @@ SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/sabnzbd-config
 CONFIGS_PATH=$SCRIPTPATH/configs
-RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
+RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
 # Check for sabnzbd-config and set configuration
 if ! [ -e $SCRIPTPATH/sabnzbd-config ]; then
@@ -98,22 +99,12 @@ fi
 #mkdir -p ${PORTS_PATH}/ports
 #mkdir -p ${PORTS_PATH}/db
 
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${RADARR_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}
 mkdir -p ${POOL_PATH}/${TORRENTS_LOCATION}
 echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}'"
-#echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}'"
 
-#sonarr_config=${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}
-#radarr_config=${POOL_PATH}/${APPS_PATH}/${RADARR_DATA}
-#lidarr_config=${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}
 sabnzbd_config=${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}
-#plex_config=${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
-#iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
 # create dir in jail for mount points
@@ -141,25 +132,11 @@ iocage restart ${JAIL_NAME}
 #iocage exec ${JAIL_NAME} pw groupmod media -m media
 #iocage restart ${JAIL_NAME} 
 
-if [ "${RELEASE}" != "11.1-RELEASE" ]; then
-#
-# Make pkg upgrade get the latest repo
-iocage exec ${JAIL_NAME} mkdir -p /usr/local/etc/pkg/repos/
-iocage exec ${JAIL_NAME} cp -f /mnt/configs/FreeBSD.conf /usr/local/etc/pkg/repos/FreeBSD.conf
-
-#
-# Upgrade to the lastest repo
-iocage exec ${JAIL_NAME} pkg upgrade -y
-iocage restart ${JAIL_NAME}
-fi
 #
 # Install Sabnzbd
 iocage exec ${JAIL_NAME} pkg install -y sabnzbdplus
 iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
-iocage exec ${JAIL_NAME} ln -s /usr/local/bin/python3.7 /usr/bin/python
-iocage exec ${JAIL_NAME} ln -s /usr/local/bin/python3.7 /usr/bin/python3
-#iocage exec ${JAIL_NAME} "pw groupmod media -m _sabnzbd"
-iocage exec ${JAIL_NAME} chown -R media:media /mnt/torrents/sabnzbd /config
+iocage exec ${JAIL_NAME} chown -R media:media /mnt/torrents /config
 iocage exec ${JAIL_NAME} sysrc "sabnzbd_user=media"
 iocage exec ${JAIL_NAME} sysrc sabnzbd_enable=YES
 iocage exec ${JAIL_NAME} sysrc sabnzbd_conf_dir="/config"
@@ -169,7 +146,7 @@ iocage exec ${JAIL_NAME} cp -f /mnt/configs/sabnzbd /usr/local/etc/rc.d/sabnzbd
 #iocage exec ${JAIL_NAME} sed -i '' "s/sabnzbddata/${SABNZBD_DATA}/" /usr/local/etc/rc.d/sabnzbd
 #iocage exec ${JAIL_NAME} sed -i '' "s/sabnzbdpid/${SABNZBD_DATA}/" /usr/local/etc/rc.d/sabnzbd
 iocage exec ${JAIL_NAME} chmod u+x /usr/local/etc/rc.d/sabnzbd
-echo "after chmod rc.d/sabnzbd"
+echo "**********after chmod rc.d/sabnzbd"
 
 #
 # Create directories to receive the downloads
@@ -177,21 +154,28 @@ iocage exec ${JAIL_NAME} mkdir -p /mnt/media/downloads/sabnzbd/complete
 iocage exec ${JAIL_NAME} mkdir -p /mnt/media/downloads/sabnzbd/incomplete
 iocage exec ${JAIL_NAME} chown -R media:media /mnt/media
 
-
-iocage restart ${JAIL_NAME}
-#iocage exec ${JAIL_NAME} service sabnzbd start
-#echo "service sabnzbd start"
+echo "********service sabnzbd start"
+#iocage start ${JAIL_NAME}
+iocage exec ${JAIL_NAME} service sabnzbd start
+echo "service sabnzbd start"
 iocage exec ${JAIL_NAME} service sabnzbd stop
-echo "service sabnzbd stop"
+echo "*********service sabnzbd stop"
 iocage exec ${JAIL_NAME} sed -i '' -e 's?host = 127.0.0.1?host = 0.0.0.0?g' /config/sabnzbd.ini
 iocage exec ${JAIL_NAME} sed -i '' -e 's?download_dir = Downloads/incomplete?download_dir = /mnt/media/downloads/sabnzbd/incomplete?g' /config/sabnzbd.ini
 iocage exec ${JAIL_NAME} sed -i '' -e 's?complete_dir = Downloads/complete?complete_dir = /mnt/media/downloads/sabnzbd/complete?g' /config/sabnzbd.ini
 iocage exec ${JAIL_NAME} sed -i '' -e 's?permissions = ""?permissions = 777?g' /config/sabnzbd.ini
 echo "before start after sed"
-iocage exec ${JAIL_NAME} service sabnzbd start
+#iocage exec ${JAIL_NAME} service sabnzbd start
 iocage restart ${JAIL_NAME}
 echo "Sabnzbd installed"
 
+# Make pkg upgrade get the latest repo
+iocage exec ${JAIL_NAME} mkdir -p /usr/local/etc/pkg/repos/
+iocage exec ${JAIL_NAME} cp -f /mnt/configs/FreeBSD.conf /usr/local/etc/pkg/repos/FreeBSD.conf
+  
+# Upgrade to the lastest repo                                                                   
+iocage exec ${JAIL_NAME} pkg upgrade -y
+iocage restart ${JAIL_NAME}
 
 #
 # remove /mnt/configs as no longer needed
