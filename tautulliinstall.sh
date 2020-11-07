@@ -10,6 +10,7 @@ fi
 
 # Initialize defaults
 JAIL_IP=""
+JAIL_NAME=""
 DEFAULT_GW_IP=""
 INTERFACE=""
 VNET="off"
