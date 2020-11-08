@@ -13,43 +13,70 @@ Thanks to Pentaflake for his work on installing these apps in an iocage jail.
 https://forums.freenas.org/index.php?resources/fn11-1-iocage-jails-plex-tautulli-sonarr-radarr-lidarr-jackett-ombi-transmission-organizr.58/
 
 ### Prerequisites
-Edit file sonarr-config
+Create file sonarr-config
 
-Edit sonarr-config file with the name of your jail, your network information and directory data name you want to use and location of your media files and torrents.
+## Required
 
-SONARR_DATA= will create a data directory /mnt/v1/apps/sonarr to store all the data for that app.
+- JAIL_IP: Your jail IP address
+- DEFAULT_GW_IP: Your default gateway
 
-MEDIA_LOCATION will set the location of your media files, in this example /mnt/v1/media
+## Optional
 
-TORRENTS_LOCATION will set the location of your torrent files, in this example /mnt/v1/torrents
+- INTERFACE: Defaults to 'vnet0' but can be 'ibg0' for example
 
+- VNET: Defaults to 'on' If INTERFACE is set to 'ibg0' for example VNET should be set to 'off'
 
+- SONARR_DATA= will create a data directory defaults to 'apps' resulting in /mnt/v1/apps/sonarr to store all the data for that app.
+
+- MEDIA_LOCATION: will set the location of your media files, defaults to 'media' resulting in /mnt/v1/media
+
+- TORRENTS_LOCATION: will set the location of your torrent files, defaults to 'torrents' resulting in /mnt/v1/torrents
+
+- USE_BASEJAIL: Defaults to '-b' If you don't want a BASEJAIL set it to ""
+
+# Minimal config file
 ```
 JAIL_IP="192.168.5.51"
 DEFAULT_GW_IP="192.168.5.1"
+```
+
+# Maximum config file
+```
+JAIL_IP="192.168.5.51"
+DEFAULT_GW_IP="192.168.5.1"
+JAIL_NAME="sonarr"
 INTERFACE="igb0"
 VNET="off"
 POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
-JAIL_NAME="sonarr"
-SONARR_DATA="sonarrdata"
+SONARR_DATA="sonarr"
 MEDIA_LOCATION="media"
 TORRENTS_LOCATION="torrents"
+USE_BASEJAIL=""
 ```
 
-Likewise create config files for the other apps - radarr-config, lidarr-config, sabnzbd-config, tautulli-config and replace JAIL_IP, JAIL_NAME, and JAIL_DATA with the name of the application. For example see below for radarr.
+Likewise create config files for the other apps - radarr-config, lidarr-config, sabnzbd-config, tautulli-config and replace the JAIL_IP. For example see below for radarr.
 
+
+Minimal radarr-config
 ```
 JAIL_IP="192.168.5.52"
 DEFAULT_GW_IP="192.168.5.1"
+```
+
+Maximum radarr-config
+```
+JAIL_IP="192.168.5.52"
+DEFAULT_GW_IP="192.168.5.1"
+JAIL_NAME="radarr"
 INTERFACE="igb0"
 VNET="off"
-JAIL_NAME="radarr"
 POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
 RADARR_DATA="radarrdata"
 MEDIA_LOCATION="media"
 TORRENTS_LOCATION="torrents"
+USE_BASEJAIL=""
 ```
 
 ## Install Sonarr in fresh Jail
