@@ -13,7 +13,7 @@ JAIL_IP=""
 JAIL_NAME=""
 DEFAULT_GW_IP=""
 INTERFACE=""
-VNET="off"
+VNET=""
 POOL_PATH=""
 APPS_PATH=""
 TAUTULLI_DATA=""
@@ -41,26 +41,29 @@ if [ -z $DEFAULT_GW_IP ]; then
   exit 1
 fi
 if [ -z $INTERFACE ]; then
-  echo 'Configuration error: INTERFACE must be set'
-  exit 1
+  INTERFACE="vnet0"
+  echo "INTERFACE defaulting to 'vnet0'"
+fi
+if [ -z $VNET ]; then
+  VNET="on"
+  echo "VNET defaulting to 'on'"
 fi
 if [ -z $POOL_PATH ]; then
   POOL_PATH="/mnt/$(iocage get -p)"
   echo "POOL_PATH defaulting to "$POOL_PATH
 fi
 if [ -z $APPS_PATH ]; then
-  echo 'Configuration error: APPS_PATH must be set'
-  exit 1
+  APPS_PATH="apps"
+  echo "APPS_PATH defaulting to 'apps'"
 fi
-
 if [ -z $JAIL_NAME ]; then
-  echo 'Configuration error: JAIL_NAME must be set'
-  exit 1
+  JAIL_NAME="tautulli"
+  echo "JAIL_NAME defaulting to 'tautulli'"
 fi
 
 if [ -z $TAUTULLI_DATA ]; then
-  echo 'Configuration error: TAUTULLI_DATA must be set'
-  exit 1
+  TAUTULLI_DATA="tautulli"
+  echo "TAUTULLI_DATA defaulting to 'tautulli'"
 fi
 
 #
