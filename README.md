@@ -2,7 +2,7 @@
 
 #### https://github.com/NasKar2/sepapps-freenas-iocage.git
 
-Scripts to create an iocage jail on Freenas 11.1U4 from scratch in separate jails for Sonarr, Radarr, Lidarr, Tautulli and Sabnzbd
+Scripts to create an iocage jail on Freenas 11.3 and TrueNAS 12.2 from scratch in separate jails for Sonarr, Radarr, Lidarr, Tautulli and Sabnzbd
 
 Sonarr etc. will be placed in a jail with separate data directory (/mnt/v1/apps/...) to allow for easy reinstallation/backup.
 
@@ -10,7 +10,7 @@ Sonarr etc. will be installed with the default user/group (media/media) and the 
 
 Thanks to Pentaflake for his work on installing these apps in an iocage jail.
 
-https://forums.freenas.org/index.php?resources/fn11-1-iocage-jails-plex-tautulli-sonarr-radarr-lidarr-jackett-ombi-transmission-organizr.58/
+https://www.truenas.com/community/resources/fn11-3-iocage-jails-plex-tautulli-sonarr-radarr-lidarr-jackett-transmission-organizr.58/
 
 ### Prerequisites
 Create file sonarr-config
