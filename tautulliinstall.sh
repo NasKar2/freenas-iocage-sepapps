@@ -56,8 +56,6 @@ if [ -z $APPS_PATH ]; then
   APPS_PATH="apps"
   echo "APPS_PATH defaulting to 'apps'"
 fi
-fi
-
 if [ -z $JAIL_NAME ]; then
   JAIL_NAME="tautulli"
   echo "JAIL_NAME defaulting to 'tautulli'"
