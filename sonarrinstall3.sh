@@ -86,7 +86,6 @@ then
 	exit 1
 fi
 rm /tmp/pkg.json
-pkg install -y /mnt/config/mono-6.8.0.105.txz
 # fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release
 # source: https://forums.freenas.org/index.php?threads/openvpn-fails-in-jail-with-libdl-so-1-not-found-error.70391/
 if [ "${RELEASE}" = "11.1-RELEASE" ]; then
@@ -137,6 +136,8 @@ iocage fstab -a ${JAIL_NAME} ${sonarr_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
 
+# install mono 6.8.0.105
+iocage exec ${JAIL_NAME} "pkg install -y /mnt/configs/mono-6.8.0.105.txz"
 iocage restart ${JAIL_NAME}
   
 # add media group to media user
