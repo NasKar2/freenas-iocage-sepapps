@@ -78,14 +78,14 @@ fi
 
 #
 # Create Jail
-echo '{"pkgs":["nano","sonarr-devel"]}' > /tmp/pkg.json
+echo '{"pkgs":["nano","sonarr-devel","libiconv"]}' > /tmp/pkg.json
 if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 then
 	echo "Failed to create jail"
 	exit 1
 fi
 rm /tmp/pkg.json
-
+pkg install -y /config/mono-6.8.0.105.txz
 # fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release
 # source: https://forums.freenas.org/index.php?threads/openvpn-fails-in-jail-with-libdl-so-1-not-found-error.70391/
 if [ "${RELEASE}" = "11.1-RELEASE" ]; then
