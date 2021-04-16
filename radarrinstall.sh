@@ -28,8 +28,8 @@ CONFIGS_PATH=$SCRIPTPATH/configs
 RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
 # Check for radarr-config and set configuration
-if ! [ -e $SCRIPTPATH/radarr-config ]; then
-  echo "$SCRIPTPATH/radarr-config must exist."
+if ! [ -e $SCRIPTPATH/radarr3-config ]; then
+  echo "$SCRIPTPATH/radarr3-config must exist."
   exit 1
 fi
 
@@ -97,6 +97,13 @@ if [ "${RELEASE}" = "11.1-RELEASE" ]; then
 fi
 
 #
+# update mono to 6.8.0.105
+iocage exec ${JAIL_NAME} cd /tmp
+iocage exec ${JAIL_NAME} pkg install -y libiconv
+iocage exec ${JAIL_NAME} fetch https://github.com/jailmanager/jailmanager.github.io/releases/download/v0.0.1/mono-6.8.0.105.txz
+iocage exec ${JAIL_NAME} pkg install -y mono-6.8.0.105.txz
+
+#
 # needed for installing from ports
 #mkdir -p ${PORTS_PATH}/ports
 #mkdir -p ${PORTS_PATH}/db
@@ -150,9 +157,9 @@ iocage restart ${JAIL_NAME}
 iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents/sabnzbd/incomplete
 iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents/sabnzbd/complete
 iocage exec ${JAIL_NAME} ln -s /usr/local/bin/mono /usr/bin/mono
-iocage exec ${JAIL_NAME} "fetch https://github.com/Radarr/Radarr/releases/download/v0.2.0.1217/Radarr.v0.2.0.1217.linux.tar.gz -o /usr/local/share"
-iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/Radarr.*.linux.tar.gz -C /usr/local/share"
-#iocage exec ${JAIL_NAME} "rm /usr/local/share/Radarr.*.linux.tar.gz"
+iocage exec ${JAIL_NAME} "fetch https://github.com/Radarr/Radarr/releases/download/v3.0.1.4259/Radarr.master.3.0.1.4259.linux.tar.gz -o /usr/local/share"
+iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/Radarr.master*.linux.tar.gz -C /usr/local/share"
+#iocage exec ${JAIL_NAME} "rm /usr/local/share/Radarr.master*.linux.tar.gz"
 
 #
 # Make media the user of the jail and create group media and make media a user of the that group
@@ -167,7 +174,10 @@ iocage exec ${JAIL_NAME} -- mkdir /usr/local/etc/rc.d
 iocage exec ${JAIL_NAME} cp -f /mnt/configs/radarr /usr/local/etc/rc.d/radarr
 iocage exec ${JAIL_NAME} chmod u+x /usr/local/etc/rc.d/radarr
 iocage exec ${JAIL_NAME} sed -i '' "s/radarrdata/${RADARR_DATA}/" /usr/local/etc/rc.d/radarr
-iocage exec ${JAIL_NAME} sysrc "radarr_enable=YES"
+iocage exec ${JAIL_NAME} sysrc radarr_enable="YES"
+iocage exec ${JAIL_NAME} sysrc radarr_user="media"
+iocage exec ${JAIL_NAME} sysrc radarr_group="media"
+iocage exec ${JAIL_NAME} sysrc radarr_data_dir="/config"
 iocage exec ${JAIL_NAME} service radarr start
 echo "Radarr installed"
 
