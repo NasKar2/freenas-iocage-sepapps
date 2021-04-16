@@ -12,7 +12,7 @@ fi
 JAIL_IP=""
 DEFAULT_GW_IP=""
 INTERFACE=""
-VNET="off"
+VNET=""
 POOL_PATH=""
 APPS_PATH=""
 SONARR_DATA=""
@@ -24,8 +24,7 @@ SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/sonarr-config3
 CONFIGS_PATH=$SCRIPTPATH/configs
-RELEASE="11.3-RELEASE"
-#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
+RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
 # Check for sonarr-config and set configuration
 if ! [ -e $SCRIPTPATH/sonarr-config ]; then
@@ -33,7 +32,6 @@ if ! [ -e $SCRIPTPATH/sonarr-config ]; then
   exit 1
 fi
 
-# Check that necessary variables were set by sonarr-config
 if [ -z $JAIL_IP ]; then
   echo 'Configuration error: JAIL_IP must be set'
   exit 1
@@ -43,37 +41,40 @@ if [ -z $DEFAULT_GW_IP ]; then
   exit 1
 fi
 if [ -z $INTERFACE ]; then
-  echo 'Configuration error: INTERFACE must be set'
-  exit 1
+  INTERFACE="vnet0"
+  echo "INTERFACE defaulting to 'vnet0'"
 fi
-if [ -z $POOL_PATH ]; then
-  echo 'Configuration error: POOL_PATH must be set'
-  exit 1
+if [ -z $VNET ]; then
+  VNET="on"
+  echo "VNET defaulting to 'on'"
 fi
 
+if [ -z $POOL_PATH ]; then
+  POOL_PATH="/mnt/$(iocage get -p)"
+  echo "POOL_PATH defaulting to "$POOL_PATH
+fi
 if [ -z $APPS_PATH ]; then
-  echo 'Configuration error: APPS_PATH must be set'
-  exit 1
+  APPS_PATH="apps"
+  echo "APPS_PATH defaulting to 'apps'"
 fi
 
 if [ -z $JAIL_NAME ]; then
-  echo 'Configuration error: JAIL_NAME must be set'
-  exit 1
+  JAIL_NAME="sonarr3"
+  echo "JAIL_NAME defaulting to 'sonarr3'"
 fi
-
+                                                                                     
 if [ -z $SONARR_DATA ]; then
-  echo 'Configuration error: SONARR_DATA must be set'
-  exit 1
+  SONARR_DATA="sonarr3"
+  echo "SONARR_DATA defaulting to 'sonarr3'"
 fi
 
 if [ -z $MEDIA_LOCATION ]; then
-  echo 'Configuration error: MEDIA_LOCATION must be set'
-  exit 1
+  MEDIA_LOCATION="media"
+  echo "MEDIA_LOCATION defaulting to 'media'"
 fi
-
 if [ -z $TORRENTS_LOCATION ]; then
-  echo 'Configuration error: TORRENTS_LOCATION must be set'
-  exit 1
+  TORRENTS_LOCATION="torrents"
+  echo "TORRENTS_LOCATION defaulting to 'torrents'"
 fi
 
 #
@@ -85,7 +86,6 @@ then
 	exit 1
 fi
 rm /tmp/pkg.json
-pkg install -y /config/mono-6.8.0.105.txz
 # fix 'libdl.so.1 missing' error in 11.1 versions, by reinstalling packages from older FreeBSD release
 # source: https://forums.freenas.org/index.php?threads/openvpn-fails-in-jail-with-libdl-so-1-not-found-error.70391/
 if [ "${RELEASE}" = "11.1-RELEASE" ]; then
@@ -136,6 +136,8 @@ iocage fstab -a ${JAIL_NAME} ${sonarr_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
 
+# install mono 6.8.0.105
+iocage exec ${JAIL_NAME} "pkg install -y /mnt/configs/mono-6.8.0.105.txz"
 iocage restart ${JAIL_NAME}
   
 # add media group to media user
