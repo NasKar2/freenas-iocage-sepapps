@@ -142,6 +142,14 @@ iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nul
 
 iocage restart ${JAIL_NAME}
   
+#
+# update mono to 6.8.0.105
+iocage exec ${JAIL_NAME} cd /mnt/configs
+iocage exec ${JAIL_NAME} pkg install -y libiconv
+#iocage exec ${JAIL_NAME} fetch https://github.com/jailmanager/jailmanager.github.io/releases/download/v0.0.1/mono-6.8.0.105.txz
+iocage exec ${JAIL_NAME} cp /mnt/configs/mono-6.8.0.105.txz /tmp/mono-6.8.0.105.txz
+iocage exec ${JAIL_NAME} pkg install -y /tmp/mono-6.8.0.105.txz
+
 # add media group to media user
 #iocage exec ${JAIL_NAME} pw groupadd -n media -g 8675309
 #iocage exec ${JAIL_NAME} pw groupmod media -m media
@@ -149,7 +157,7 @@ iocage restart ${JAIL_NAME}
 
 #
 # Install Lidarr
-iocage exec ${JAIL_NAME} "fetch https://github.com/lidarr/Lidarr/releases/download/v0.6.2.883/Lidarr.develop.0.6.2.883.linux.tar.gz -o /usr/local/share"
+iocage exec ${JAIL_NAME} "fetch https://github.com/lidarr/Lidarr/releases/download/v0.8.0.2042/Lidarr.develop.0.8.0.2042.linux.tar.gz -o /usr/local/share"
 iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/Lidarr.develop.*.linux.tar.gz -C /usr/local/share"
 iocage exec ${JAIL_NAME} "rm /usr/local/share/Lidarr.develop.*.linux.tar.gz"
 iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
