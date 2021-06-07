@@ -14,11 +14,11 @@
 # radarr_user:    The user account used to run the radarr daemon.
 #            This is optional, however do not specifically set this to an
 #            empty string as this will cause the daemon to run as root.
-#            Default: media
+#            Default: radarr
 # radarr_group:    The group account used to run the radarr daemon.
 #            This is optional, however do not specifically set this to an
 #            empty string as this will cause the daemon to run with group wheel.
-#            Default: media
+#            Default: radarr
 # radarr_data_dir:    Directory where radarr configuration
 #            data is stored.
 #            Default: /var/db/radarr
@@ -33,18 +33,19 @@ load_rc_config $name
 : ${radarr_group:="media"}
 : ${radarr_data_dir:="/config"}
 
-pidfile="${radarr_data_dir}/nzbdrone.pid"
+pidfile="${radarr_data_dir}/${name}radarr.pid"
+pidfile_child="${radarr_data_dir}/${name}_child.pid"
 command="/usr/sbin/daemon"
-procname="/usr/local/bin/mono"
-command_args="-f ${procname} /usr/local/share/Radarr/Radarr.exe --data=${radarr_data_dir} --nobrowser"
 
-start_precmd=radarr_precmd
+start_precmd=${name}_precmd
 radarr_precmd() {
     if [ ! -d ${radarr_data_dir} ]; then
     install -d -o ${radarr_user} -g ${radarr_group} ${radarr_data_dir}
     fi
 
     export XDG_CONFIG_HOME=${radarr_data_dir}
+    rc_flags="-r -f -p ${pidfile_child} -P ${pidfile} /usr/local/share/Radarr/Radarr --data=${radarr_data_dir} --nobrowser >> /dev/null 2>&1 ${rc_flags}"
+
 }
 
 run_rc_command "$1"
