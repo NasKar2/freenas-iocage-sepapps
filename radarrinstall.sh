@@ -109,22 +109,15 @@ fi
 #mkdir -p ${PORTS_PATH}/ports
 #mkdir -p ${PORTS_PATH}/db
 
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}
+mkdir -p /temp/downloads/sabnzbd/complete
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${RADARR_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/videos/movies
 mkdir -p ${POOL_PATH}/${TORRENTS_LOCATION}
 echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${RADARR_DATA}'"
 #echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}'"
 chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
 
-#sonarr_config=${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}
 radarr_config=${POOL_PATH}/${APPS_PATH}/${RADARR_DATA}
-#lidarr_config=${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}
-#sabnzbd_config=${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}
-#plex_config=${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 #iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
@@ -140,7 +133,7 @@ iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents
 # mount ports so they can be accessed in the jail
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/ports /usr/ports nullfs rw 0 0
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/db /var/db/portsnap nullfs rw 0 0
-
+iocage fstab -a ${JAIL_NAME} /temp /temp nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${radarr_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
