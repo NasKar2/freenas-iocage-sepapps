@@ -82,7 +82,9 @@ fi
 
 #
 # Create Jail
-echo '{"pkgs":["nano","mono","mediainfo","sqlite3","ca_root_nss","curl","chromaprint"]}' > /tmp/pkg.json
+#echo '{"pkgs":["nano","mono","mediainfo","sqlite3","ca_root_nss","curl","chromaprint"]}' > /tmp/pkg.json
+#echo '{"pkgs":["nano","mediainfo","sqlite3","libchromaprint-tools","curl"]}' > /tmp/pkg.json
+echo '{"pkgs":["libunwind","icu","libinotify","openssl","mediainfo","sqlite3","ca_root_nss","libiconv","nano","curl","wget"]}' > /tmp/pkg.json
 if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
 	echo "Failed to create jail"
@@ -102,11 +104,7 @@ fi
 #mkdir -p ${PORTS_PATH}/ports
 #mkdir -p ${PORTS_PATH}/db
 
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${RADARR_DATA}
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 mkdir -p /temp/downloads/sabnzbd/complete
 mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/videos/music
 mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/${SABNZBD_DOWNLOADS}
@@ -143,14 +141,6 @@ iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nul
 
 iocage restart ${JAIL_NAME}
   
-#
-# update mono to 6.8.0.105
-iocage exec ${JAIL_NAME} cd /mnt/configs
-iocage exec ${JAIL_NAME} pkg install -y libiconv
-#iocage exec ${JAIL_NAME} fetch https://github.com/jailmanager/jailmanager.github.io/releases/download/v0.0.1/mono-6.8.0.105.txz
-iocage exec ${JAIL_NAME} cp /mnt/configs/mono-6.8.0.105.txz /tmp/mono-6.8.0.105.txz
-iocage exec ${JAIL_NAME} pkg install -y /tmp/mono-6.8.0.105.txz
-
 # add media group to media user
 #iocage exec ${JAIL_NAME} pw groupadd -n media -g 8675309
 #iocage exec ${JAIL_NAME} pw groupmod media -m media
@@ -158,12 +148,15 @@ iocage exec ${JAIL_NAME} pkg install -y /tmp/mono-6.8.0.105.txz
 
 #
 # Install Lidarr
-iocage exec ${JAIL_NAME} "fetch https://github.com/lidarr/Lidarr/releases/download/v0.8.0.2042/Lidarr.develop.0.8.0.2042.linux.tar.gz -o /usr/local/share"
-iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/Lidarr.develop.*.linux.tar.gz -C /usr/local/share"
-iocage exec ${JAIL_NAME} "rm /usr/local/share/Lidarr.develop.*.linux.tar.gz"
+iocage exec ${JAIL_NAME} "fetch https://github.com/lidarr/Lidarr/releases/download/v0.8.1.2135/Lidarr.master.0.8.1.2135.linux-core-x64.tar.gz -o /usr/local/share"
+iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/Lidarr.master.*.linux-core-x64.tar.gz -C /usr/local/share"
+iocage exec ${JAIL_NAME} "rm /usr/local/share/Lidarr.master.*.linux-core-x64.tar.gz"
+#iocage exec ${JAIL_NAME} "fetch https://github.com/lidarr/Lidarr/releases/download/v0.8.0.2042/Lidarr.develop.0.8.0.2042.linux.tar.gz -o /usr/local/share"
+#iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/Lidarr.develop.*.linux.tar.gz -C /usr/local/share"
+#iocage exec ${JAIL_NAME} "rm /usr/local/share/Lidarr.develop.*.linux.tar.gz"
 iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
 iocage exec ${JAIL_NAME} chown -R media:media /usr/local/share/Lidarr /config
-iocage exec ${JAIL_NAME} cp -f /mnt/configs/lidarr /usr/local/etc/rc.d/lidarr
+#iocage exec ${JAIL_NAME} cp -f /mnt/configs/lidarr /usr/local/etc/rc.d/lidarr
 iocage exec ${JAIL_NAME} chmod u+x /usr/local/etc/rc.d/lidarr
 #iocage exec ${JAIL_NAME} chown -R media:media /usr/local/etc/rc.d/lidarr
 iocage exec ${JAIL_NAME} sed -i '' "s/lidarrdata/${LIDARR_DATA}/" /usr/local/etc/rc.d/lidarr
