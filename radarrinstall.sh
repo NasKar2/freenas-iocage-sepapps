@@ -28,8 +28,8 @@ CONFIGS_PATH=$SCRIPTPATH/configs
 RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
 # Check for radarr-config and set configuration
-if ! [ -e $SCRIPTPATH/radarr3-config ]; then
-  echo "$SCRIPTPATH/radarr3-config must exist."
+if ! [ -e $SCRIPTPATH/radarr-config ]; then
+  echo "$SCRIPTPATH/radarr-config must exist."
   exit 1
 fi
 
