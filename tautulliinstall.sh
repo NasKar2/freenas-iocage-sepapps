@@ -136,6 +136,7 @@ iocage exec ${JAIL_NAME} "pw user add tautulli -c tautulli -u 109 -d /nonexisten
 iocage exec ${JAIL_NAME} chown -R tautulli:tautulli /usr/local/share/Tautulli /config
 iocage exec ${JAIL_NAME} cp /usr/local/share/Tautulli/init-scripts/init.freenas /usr/local/etc/rc.d/tautulli
 iocage exec ${JAIL_NAME} chmod u+x /usr/local/etc/rc.d/tautulli
+iocage exec ${JAIL_NAME} chown -R tautulli:tautulli /usr/local/etc/rc.d/tautulli
 iocage exec ${JAIL_NAME} sysrc "tautulli_enable=YES"
 iocage exec ${JAIL_NAME} sysrc "tautulli_flags=--datadir /config"
 iocage exec ${JAIL_NAME} service tautulli start
