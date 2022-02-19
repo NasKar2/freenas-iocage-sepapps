@@ -136,6 +136,7 @@ iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${sonarr_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/temp /mnt/v1/temp nullfs rw 0 0
 
 # install mono 6.8.0.105
 iocage exec ${JAIL_NAME} "pkg install -y /mnt/configs/mono-6.8.0.105.txz"
