@@ -100,11 +100,11 @@ iocage exec ${JAIL_NAME} pkg install -y radarr
 # needed for installing from ports
 #mkdir -p ${PORTS_PATH}/ports
 #mkdir -p ${PORTS_PATH}/db
-
-mkdir -p /temp/downloads/sabnzbd/complete
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${RADARR_DATA}
 mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/videos/movies
 mkdir -p ${POOL_PATH}/${TORRENTS_LOCATION}
+mkdir -p ${POOL_PATH}/temp/downloads/sabnzbd/complete/movies/
+
 echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${RADARR_DATA}'"
 chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
 
@@ -117,6 +117,7 @@ iocage exec ${JAIL_NAME} mkdir -p /config
 iocage exec ${JAIL_NAME} mkdir -p /mnt/media
 iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents
+iocage exec ${JAIL_NAME} "mkdir -p /temp/downloads/sabnzbd/complete/movies"
 
 #
 # mount ports so they can be accessed in the jail
@@ -127,7 +128,7 @@ iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${radarr_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
-
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/temp/downloads/sabnzbd/complete/movies /temp/downloads/sabnzbd/complete/movies nullfs rw 0 0
 
 #
 # Install Radarr
