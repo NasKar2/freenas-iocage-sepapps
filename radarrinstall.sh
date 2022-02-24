@@ -23,17 +23,17 @@ USE_BASEJAIL="-b"
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
-. $SCRIPTPATH/radarr3-config
+. $SCRIPTPATH/radarr-config
 CONFIGS_PATH=$SCRIPTPATH/configs
 RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
-# Check for radarr3-config and set configuration
-if ! [ -e $SCRIPTPATH/radarr3-config ]; then
-  echo "$SCRIPTPATH/radarr3-config must exist."
+# Check for radarr-config and set configuration
+if ! [ -e $SCRIPTPATH/radarr-config ]; then
+  echo "$SCRIPTPATH/radarr-config must exist."
   exit 1
 fi
 
-# Check that necessary variables were set by radarr3-config
+# Check that necessary variables were set by radarr-config
 if [ -z $JAIL_IP ]; then
   echo 'Configuration error: JAIL_IP must be set'
   exit 1
