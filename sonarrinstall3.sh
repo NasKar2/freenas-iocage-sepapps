@@ -104,6 +104,7 @@ mkdir -p ${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}
 #mkdir -p ${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}
 #mkdir -p ${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}
 #mkdir -p ${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
+mkdir -p /temp/downloads/sabnzbd/complete
 mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/videos/tvshows
 mkdir -p ${POOL_PATH}/${TORRENTS_LOCATION}
 chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
@@ -130,11 +131,12 @@ iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents
 # mount ports so they can be accessed in the jail
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/ports /usr/ports nullfs rw 0 0
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/db /var/db/portsnap nullfs rw 0 0
-
+iocage fstab -a ${JAIL_NAME} /temp /temp nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${sonarr_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/temp /mnt/v1/temp nullfs rw 0 0
 
 # install mono 6.8.0.105
 iocage exec ${JAIL_NAME} "pkg install -y /mnt/configs/mono-6.8.0.105.txz"

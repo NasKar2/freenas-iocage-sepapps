@@ -23,17 +23,17 @@ USE_BASEJAIL="-b"
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
-. $SCRIPTPATH/radarr-config
+. $SCRIPTPATH/radarr3-config
 CONFIGS_PATH=$SCRIPTPATH/configs
 RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
 # Check for radarr-config and set configuration
-if ! [ -e $SCRIPTPATH/radarr-config ]; then
-  echo "$SCRIPTPATH/radarr-config must exist."
+if ! [ -e $SCRIPTPATH/radarr3-config ]; then
+  echo "$SCRIPTPATH/radarr3-config must exist."
   exit 1
 fi
 
-# Check that necessary variables were set by radarr-config
+# Check that necessary variables were set by radarr3-config
 if [ -z $JAIL_IP ]; then
   echo 'Configuration error: JAIL_IP must be set'
   exit 1
@@ -59,13 +59,13 @@ if [ -z $APPS_PATH ]; then
   echo "APPS_PATH defaulting to 'apps'"
 fi
 if [ -z $JAIL_NAME ]; then
-  JAIL_NAME="radarr"
-  echo "JAIL_NAME defaulting to 'radarr'"
+  JAIL_NAME="radarr3"
+  echo "JAIL_NAME defaulting to 'radarr3'"
 fi
 
 if [ -z $RADARR_DATA ]; then
-  RADARR_DATA="radarr"
-  echo "RADARR_DATA defaulting to 'radarr'"
+  RADARR_DATA="radarr3"
+  echo "RADARR_DATA defaulting to 'radarr3'"
 fi
 
 if [ -z $MEDIA_LOCATION ]; then
@@ -80,8 +80,9 @@ fi
 
 #
 # Create Jail
-echo '{"pkgs":["nano","mono","mediainfo","sqlite3","ca_root_nss","curl"]}' > /tmp/pkg.json
-if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
+#echo '{"pkgs":["nano","mono","mediainfo","sqlite3","ca_root_nss","curl"]}' > /tmp/pkg.json
+echo '{"pkgs":["libunwind","icu","libinotify","openssl","mediainfo","sqlite3","ca_root_nss","libiconv","nano","curl","wget"]}' > /tmp/pkg.json
+if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" allow_mlock="1" allow_raw_sockets="1" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
 	echo "Failed to create jail"
 	exit 1
@@ -98,32 +99,25 @@ fi
 
 #
 # update mono to 6.8.0.105
-iocage exec ${JAIL_NAME} cd /tmp
-iocage exec ${JAIL_NAME} pkg install -y libiconv
-iocage exec ${JAIL_NAME} fetch https://github.com/jailmanager/jailmanager.github.io/releases/download/v0.0.1/mono-6.8.0.105.txz
-iocage exec ${JAIL_NAME} pkg install -y mono-6.8.0.105.txz
+#iocage exec ${JAIL_NAME} cd /tmp
+#iocage exec ${JAIL_NAME} pkg install -y libiconv
+#iocage exec ${JAIL_NAME} fetch https://github.com/jailmanager/jailmanager.github.io/releases/download/v0.0.1/mono-6.8.0.105.txz
+#iocage exec ${JAIL_NAME} pkg install -y mono-6.8.0.105.txz
 
 #
 # needed for installing from ports
 #mkdir -p ${PORTS_PATH}/ports
 #mkdir -p ${PORTS_PATH}/db
 
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}
+mkdir -p /temp/downloads/sabnzbd/complete
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${RADARR_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}
-#mkdir -p ${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/videos/movies
 mkdir -p ${POOL_PATH}/${TORRENTS_LOCATION}
 echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${RADARR_DATA}'"
 #echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}'"
 chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
 
-#sonarr_config=${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}
 radarr_config=${POOL_PATH}/${APPS_PATH}/${RADARR_DATA}
-#lidarr_config=${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}
-#sabnzbd_config=${POOL_PATH}/${APPS_PATH}/${SABNZBD_DATA}
-#plex_config=${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 #iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
@@ -139,7 +133,7 @@ iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents
 # mount ports so they can be accessed in the jail
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/ports /usr/ports nullfs rw 0 0
 #iocage fstab -a ${JAIL_NAME} ${PORTS_PATH}/db /var/db/portsnap nullfs rw 0 0
-
+iocage fstab -a ${JAIL_NAME} /temp /temp nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${radarr_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
@@ -156,10 +150,11 @@ iocage restart ${JAIL_NAME}
 # Install Radarr
 iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents/sabnzbd/incomplete
 iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents/sabnzbd/complete
-iocage exec ${JAIL_NAME} ln -s /usr/local/bin/mono /usr/bin/mono
-iocage exec ${JAIL_NAME} "fetch https://github.com/Radarr/Radarr/releases/download/v3.0.1.4259/Radarr.master.3.0.1.4259.linux.tar.gz -o /usr/local/share"
-iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/Radarr.master*.linux.tar.gz -C /usr/local/share"
-#iocage exec ${JAIL_NAME} "rm /usr/local/share/Radarr.master*.linux.tar.gz"
+#iocage exec ${JAIL_NAME} ln -s /usr/local/bin/mono /usr/bin/mono
+#iocage exec ${JAIL_NAME} "fetch https://github.com/Radarr/Radarr/releases/download/v3.0.1.4259/Radarr.master.3.0.1.4259.linux.tar.gz -o /usr/local/share"
+iocage exec ${JAIL_NAME} "fetch https://github.com/Radarr/Radarr/releases/download/v3.1.0.4893/Radarr.develop.3.1.0.4893.freebsd-core-x64.tar.gz -o /usr/local/share"
+iocage exec ${JAIL_NAME} "tar -xzvf /usr/local/share/Radarr.*.freebsd-core-x64.tar.gz -C /usr/local/share"
+#iocage exec ${JAIL_NAME} "rm /usr/local/share/Radarr.*.freebsd-core-x64.tar.gz"
 
 #
 # Make media the user of the jail and create group media and make media a user of the that group
