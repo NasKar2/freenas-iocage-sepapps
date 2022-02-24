@@ -89,7 +89,9 @@ fi
 rm /tmp/pkg.json
 #
 # Update pkg
-  iocage exec ${JAIL_NAME} sed -i '' "s/quarterly/latest/" /etc/pkg/FreeBSD.conf
+  iocage exec ${JAIL_NAME} "mkdir -p /usr/local/etc/pkg/repos/"
+  iocage exec ${JAIL_NAME} cp /etc/pkg/FreeBSD.conf /usr/local/etc/pkg/repos/FreeBSD.conf
+  iocage exec ${JAIL_NAME} sed -i '' "s/quarterly/latest/" /usr/local/etc/pkg/repos/FreeBSD.conf
   iocage exec ${JAIL_NAME} pkg update -f
   iocage exec ${JAIL_NAME} pkg upgrade -yf
 
@@ -138,7 +140,7 @@ iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent
 
 #
 # Change to user media
-iocage exec ${JAIL_NAME} chown -R media:media /usr/local/share/Radarr /config
+iocage exec ${JAIL_NAME} chown -R media:media /config
 iocage exec ${JAIL_NAME} sysrc radarr_enable="YES"
 iocage exec ${JAIL_NAME} sysrc radarr_user="media"
 iocage exec ${JAIL_NAME} sysrc radarr_group="media"
