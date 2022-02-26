@@ -114,7 +114,7 @@ lidarr_config=${POOL_PATH}/${APPS_PATH}/${LIDARR_DATA}
 iocage exec ${JAIL_NAME} mkdir -p /usr/ports
 iocage exec ${JAIL_NAME} mkdir -p /var/db/portsnap
 iocage exec ${JAIL_NAME} mkdir -p /config
-iocage exec ${JAIL_NAME} mkdir -p /mnt/media
+iocage exec ${JAIL_NAME} mkdir -p /mnt/${MEDIA_LOCATION}
 iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents
 iocage exec ${JAIL_NAME} "mkdir -p /temp/downloads/sabnzbd/complete/music"
@@ -126,7 +126,7 @@ iocage exec ${JAIL_NAME} "mkdir -p /temp/downloads/sabnzbd/complete/music"
 iocage fstab -a ${JAIL_NAME} /temp /temp nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${lidarr_config} /config nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/${MEDIA_LOCATION} nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/temp/downloads/sabnzbd/complete/music /temp/downloads/sabnzbd/complete/music nullfs rw 0 0
 
