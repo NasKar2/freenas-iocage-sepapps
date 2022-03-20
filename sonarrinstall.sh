@@ -103,7 +103,7 @@ iocage exec ${JAIL_NAME} pkg install -y sonarr
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}
 mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}/videos/tvshows
 mkdir -p ${POOL_PATH}/${TORRENTS_LOCATION}
-mkdir -p "${POOL_PATH}/temp/downloads/sabnzbd/complete/tvshows/"
+mkdir -p "${POOL_PATH}/temp/downloads/sabnzbd/complete/tv/"
 
 echo "mkdir -p '${POOL_PATH}/${APPS_PATH}/${SONARR_DATA}'"
 chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
@@ -117,7 +117,7 @@ iocage exec ${JAIL_NAME} mkdir -p /config
 iocage exec ${JAIL_NAME} mkdir -p /mnt/${MEDIA_LOCATION}
 iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents
-iocage exec ${JAIL_NAME} "mkdir -p /temp/downloads/sabnzbd/complete/tvshows/"
+iocage exec ${JAIL_NAME} "mkdir -p /temp/downloads/sabnzbd/complete/tv/"
 
 #
 # mount ports so they can be accessed in the jail
@@ -128,8 +128,7 @@ iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${sonarr_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/${MEDIA_LOCATION} nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${TORRENTS_LOCATION} /mnt/torrents nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/temp/downloads/sabnzbd/complete/tvshows /temp/downloads/sabnzbd/complete/tvshows nullfs rw 0 0
-
+iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/temp/downloads/sabnzbd/complete/tv /temp/downloads/sabnzbd/complete/tv nullfs rw 0 0
 #
 # Install Sonarr
 #iocage exec ${JAIL_NAME} mkdir -p /mnt/torrents/sabnzbd/incomplete
