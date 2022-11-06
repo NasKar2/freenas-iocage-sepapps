@@ -153,6 +153,11 @@ echo "sonarr installed"
 chown -R media:media ${POOL_PATH}/${MEDIA_LOCATION}
 chown -R media:media ${POOL_PATH}/${TORRENTS_LOCATION}
 
+# fix ssl error for mono
+iocage exec ${JAIL_NAME} pkg install -y wget
+iocage exec ${JAIL_NAME} "wget -O - https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin"
+cp -R ${POOL_PATH}/iocage/jails/${JAIL_NAME}/root/root/.config/.mono/ ${POOL_PATH}/iocage/releases/${RELEASE}/root/usr/share/.mono
+
 echo
 echo "Sonarr should be available at http://${JAIL_IP}:8989"
 echo "tvshows will be located at "${POOL_PATH}/${MEDIA_LOCATION}/videos/tvshows
