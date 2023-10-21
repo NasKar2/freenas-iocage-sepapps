@@ -24,7 +24,10 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/tautulli-config
 CONFIGS_PATH=$SCRIPTPATH/configs
 RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
-
+# If release is 13.1-RELEASE, change to 13.2-RELEASE
+if [ "${RELEASE}" = "13.1-RELEASE" ]; then
+  RELEASE="13.2-RELEASE"
+fi 
 # Check for tautulli-config and set configuration
 if ! [ -e $SCRIPTPATH/tautulli-config ]; then
   echo "$SCRIPTPATH/tautulli-config must exist."
@@ -68,7 +71,7 @@ fi
 
 #
 # Create Jail
-echo '{"pkgs":["nano","python","py38-setuptools","py38-sqlite3","py38-openssl","py38-pycryptodomex","ca_root_nss","git-lite"]}' > /tmp/pkg.json
+echo '{"pkgs":["nano","python","py39-setuptools","py39-sqlite3","py39-openssl","py39-pycryptodomex","ca_root_nss","git-lite"]}' > /tmp/pkg.json
 if ! iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r "${RELEASE}" ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}" ${USE_BASEJAIL}
 then
 	echo "Failed to create jail"
